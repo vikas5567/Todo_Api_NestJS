@@ -6,23 +6,23 @@ import { DatabaseService } from "src/database/database.service";
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy){
     constructor(
-        private readonly databaseService: DatabaseService
+        private readonly  databaseService: DatabaseService
     ){
-        super ({
+        super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
             ignoreExpiration: false,
             secretOrKey: "Secret"
         })
     }
 
-    async validate(payload: {email:string}) {
+    async validate(payload: { email: string }) {
         console.log(payload)
-        const user = this.databaseService.user.findFirst({
-            where: {
-                email: payload.email
-            }
-        })
+        const user = await this.databaseService.user.findFirst({
+          where: {
+            email: payload.email,
+          }
+        });
         return user;
-    }
+      }
 
 }
